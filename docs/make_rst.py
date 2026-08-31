@@ -118,6 +118,7 @@ CORE_TYPES: List[str] = [
     "Projection",
     "RID",
     "Rect2",
+    "Rect2i",
     "String",
     "StringName",
     "Transform3D",

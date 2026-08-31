@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="OpenXRAndroidViewportFeatheringExtension" inherits="OpenXRExtensionWrapper" api_type="extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
+	<brief_description>
+		Allow getting the viewport feathering insets via [code]XR_ANDROID_viewport_feathering[/code].
+	</brief_description>
+	<description>
+		Allow getting the viewport feathering insets via [code]XR_ANDROID_viewport_feathering[/code].
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="get_display_safe_area" qualifiers="const">
+			<return type="Rect2i" />
+			<param index="0" name="view" type="int" />
+			<description>
+				Returns a [code]Rect2i[/code] representing the safe area to put UI elements, such that they won't overlap any viewport feathering.
+				If the [code]XR_ANDROID_viewport_feathering[/code] extension isn't enabled or supported, this will return a [code]Rect2i[/code] with a size of [code]Vector2i(0, 0)[/code].
+			</description>
+		</method>
+		<method name="is_enabled" qualifiers="const">
+			<return type="bool" />
+			<description>
+				Returns [code]true[/code] if this extension is supported on this device; otherwise, [code]false[/code].
+			</description>
+		</method>
+	</methods>
+</class>
