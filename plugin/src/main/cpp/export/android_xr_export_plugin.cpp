@@ -82,8 +82,33 @@ AndroidXREditorExportPlugin::AndroidXREditorExportPlugin() {
 			PROPERTY_USAGE_DEFAULT,
 			false,
 			false);
+	_spatial_api_version_option = _generate_export_option(
+			"android_xr_features/spatial_api_version",
+			"",
+			Variant::Type::INT,
+			PROPERTY_HINT_RANGE,
+			"1,100,1,or_greater",
+			PROPERTY_USAGE_DEFAULT,
+			1,
+			false);
 
 	ProjectSettings::get_singleton()->connect("settings_changed", callable_mp(this, &AndroidXREditorExportPlugin::_project_settings_changed));
+
+	// Build table of extensions that require Spatial API version 2 or newer.
+	// Note: There's no setting for XR_ANDROID_enumerate_system_extension_properties (it needs v3).
+	spatial_api_requirements.push_back({ "xr/openxr/extensions/frame_synthesis", 3 });
+	spatial_api_requirements.push_back({ "xr/openxr/extensions/user_presence", 3 });
+	// @todo We don't yet support these extensions, but here are the required versions:
+	//  - XR_ANDROID_body_tracking - v2
+	//  - XR_ANDROID_face_tracking_data_source - v3
+	//  - XR_ANDROID_light_estimation_cubemap - v3
+	//  - XR_ANDROID_spatial_anchor_space - v3
+	//  - XR_ANDROID_spatial_annotation_tracking - v3
+	//  - XR_ANDROID_spatial_object_tracking - v3
+	//  - XR_ANDROID_trackables_image - v3
+	//  - XR_QCOM_trackables_image_operations - v3
+	//  - XR_KHR_extended_struct_name_lengths - v3
+	//  - XR_EXT_interaction_profile_battery_state_display - v3
 }
 
 void AndroidXREditorExportPlugin::_bind_methods() {}
@@ -100,6 +125,7 @@ TypedArray<Dictionary> AndroidXREditorExportPlugin::_get_export_options(const Re
 	export_options.append(_tracked_controllers_option);
 	export_options.append(_recommended_boundary_type_option);
 	export_options.append(_use_experimental_features_option);
+	export_options.append(_spatial_api_version_option);
 
 	return export_options;
 }
@@ -141,6 +167,19 @@ String AndroidXREditorExportPlugin::_get_export_option_warning(const Ref<EditorE
 	} else if (option == "android_xr_features/use_experimental_features") {
 		if (!openxr_enabled && _get_bool_option(option)) {
 			return "\"Use experimental features\" is only valid when \"XR Mode\" is \"OpenXR\".\n";
+		}
+	} else if (option == "android_xr_features/spatial_api_version") {
+		int spatial_api_version = _get_int_option(option, 0);
+		PackedStringArray messages;
+		for (const SpatialAPIRequirement &req : spatial_api_requirements) {
+			if ((bool)export_preset->get_project_setting(req.project_setting) && spatial_api_version < req.spatial_api_version) {
+				PackedStringArray name_parts = String(req.project_setting).split("/");
+				String name = name_parts[name_parts.size() - 1].capitalize();
+				messages.push_back(vformat("\"%s\" needs Spatial API Version %d or later; if it's required, set your Spatial API Version to at least %d.", name, req.spatial_api_version, req.spatial_api_version));
+			}
+		}
+		if (messages.size() > 0) {
+			return String("\n").join(messages);
 		}
 	} else if (option == "xr_features/enable_androidxr_plugin") {
 		if (godot::gdextension_interface::godot_version.minor >= 8) {
@@ -288,6 +327,11 @@ String AndroidXREditorExportPlugin::_get_android_manifest_element_contents(const
 	// Android XR required
 	bool android_xr_required = _get_hybrid_app_launch_mode() != OpenXRHybridApp::HYBRID_MODE_PANEL;
 	contents += vformat("    <uses-feature android:name=\"android.software.xr.api.openxr\" android:required=\"%s\" />\n", _bool_to_string(android_xr_required));
+
+	int spatial_api_version = _get_int_option("android_xr_features/spatial_api_version", 0);
+	if (spatial_api_version > 0) {
+		contents += vformat("    <uses-feature android:name=\"android.software.xr.api.spatial\" android:version=\"%s\" android:required=\"true\" />\n", spatial_api_version);
+	}
 
 	int tracked_controllers_option = _get_int_option("android_xr_features/tracked_controllers", TRACKED_CONTROLLERS_NONE_VALUE);
 	if (tracked_controllers_option > TRACKED_CONTROLLERS_NONE_VALUE) {

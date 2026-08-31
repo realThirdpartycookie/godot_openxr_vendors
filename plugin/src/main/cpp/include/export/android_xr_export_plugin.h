@@ -74,8 +74,15 @@ protected:
 	Dictionary _tracked_controllers_option;
 	Dictionary _recommended_boundary_type_option;
 	Dictionary _use_experimental_features_option;
+	Dictionary _spatial_api_version_option;
 
 	mutable bool _should_update_options = false;
+
+	struct SpatialAPIRequirement {
+		StringName project_setting;
+		uint32_t spatial_api_version;
+	};
+	LocalVector<SpatialAPIRequirement> spatial_api_requirements;
 
 	void _project_settings_changed() {
 		_should_update_options = true;
