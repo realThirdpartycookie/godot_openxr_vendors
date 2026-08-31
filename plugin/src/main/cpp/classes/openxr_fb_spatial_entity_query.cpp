@@ -162,7 +162,7 @@ bool OpenXRFbSpatialEntityQuery::_execute_query_by_uuid() {
 	LocalVector<XrUuidEXT> uuid_array;
 	uuid_array.resize(uuids.size());
 	for (int i = 0; i < uuids.size(); i++) {
-		PackedByteArray uuid_data = String(uuids[i]).replace("-", "").hex_decode();
+		PackedByteArray uuid_data = String(uuids[i]).remove_char('-').hex_decode();
 		ERR_CONTINUE_MSG(uuid_data.size() != 16, vformat("Invalid UUID: %s", uuids[i]));
 		memcpy(uuid_array[i].data, uuid_data.ptr(), 16);
 	}

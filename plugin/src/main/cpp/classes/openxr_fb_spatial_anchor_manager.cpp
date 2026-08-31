@@ -198,11 +198,13 @@ void OpenXRFbSpatialAnchorManager::_on_anchor_created(bool p_success, const Tran
 void OpenXRFbSpatialAnchorManager::load_anchor(const StringName &p_uuid, const Dictionary &p_custom_data, OpenXRFbSpatialEntity::StorageLocation p_location) {
 	ERR_FAIL_COND(!xr_origin);
 
+	StringName uuid = String(p_uuid).remove_char('-');
+
 	Array uuids;
-	uuids.push_back(p_uuid);
+	uuids.push_back(uuid);
 
 	Dictionary data;
-	data[p_uuid] = p_custom_data;
+	data[uuid] = p_custom_data;
 
 	Ref<OpenXRFbSpatialEntityQuery> query;
 	query.instantiate();
@@ -227,13 +229,17 @@ void OpenXRFbSpatialAnchorManager::load_anchors(const TypedArray<StringName> &p_
 		// In order for this to work correctly, we need to make sure that all UUIDs are present
 		// on the custom data dictionary (and no others).
 		for (int i = 0; i < p_uuids.size(); i++) {
-			all_custom_data[p_uuids[i]] = p_all_custom_data.get(p_uuids[i], Dictionary());
+			all_custom_data[String(p_uuids[i]).remove_char('-')] = p_all_custom_data.get(p_uuids[i], Dictionary());
 		}
 	} else {
 		// Otherwise, we just query the specific anchors we know about.
 		query->query_by_uuid(p_uuids, p_location);
 		query->set_max_results(p_uuids.size());
-		all_custom_data = p_all_custom_data;
+
+		Array custom_data_keys = p_all_custom_data.keys();
+		for (int i = 0; i < custom_data_keys.size(); i++) {
+			all_custom_data[String(custom_data_keys[i]).remove_char('-')] = p_all_custom_data[custom_data_keys[i]];
+		}
 	}
 
 	query->connect("openxr_fb_spatial_entity_query_completed", callable_mp(this, &OpenXRFbSpatialAnchorManager::_on_anchor_load_query_completed).bind(all_custom_data, p_location, p_erase_unknown_anchors));
@@ -332,7 +338,7 @@ void OpenXRFbSpatialAnchorManager::untrack_anchor(const Variant &p_spatial_entit
 		ERR_FAIL_COND(spatial_entity.is_null());
 		uuid = spatial_entity->get_uuid();
 	} else if (p_spatial_entity_or_uuid.get_type() == Variant::STRING || p_spatial_entity_or_uuid.get_type() == Variant::STRING_NAME) {
-		uuid = p_spatial_entity_or_uuid;
+		uuid = String(p_spatial_entity_or_uuid).remove_char('-');
 	} else {
 		ERR_FAIL_MSG("Invalid argument passed to OpenXRFbSpatialAnchorManager::untrack_anchor().");
 	}
@@ -393,7 +399,7 @@ Array OpenXRFbSpatialAnchorManager::get_anchor_uuids() const {
 }
 
 XRAnchor3D *OpenXRFbSpatialAnchorManager::get_anchor_node(const StringName &p_uuid) const {
-	const Anchor *anchor = anchors.getptr(p_uuid);
+	const Anchor *anchor = anchors.getptr(String(p_uuid).remove_char('-'));
 	if (anchor) {
 		return Object::cast_to<XRAnchor3D>(ObjectDB::get_instance(anchor->node));
 	}
@@ -402,7 +408,7 @@ XRAnchor3D *OpenXRFbSpatialAnchorManager::get_anchor_node(const StringName &p_uu
 }
 
 Ref<OpenXRFbSpatialEntity> OpenXRFbSpatialAnchorManager::get_spatial_entity(const StringName &p_uuid) const {
-	const Anchor *anchor = anchors.getptr(p_uuid);
+	const Anchor *anchor = anchors.getptr(String(p_uuid).remove_char('-'));
 	if (anchor) {
 		return anchor->entity;
 	}

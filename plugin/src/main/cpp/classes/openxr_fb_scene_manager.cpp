@@ -376,7 +376,7 @@ Array OpenXRFbSceneManager::get_anchor_uuids() const {
 XRAnchor3D *OpenXRFbSceneManager::get_anchor_node(const StringName &p_uuid) const {
 	ERR_FAIL_COND_V(!anchors_created, nullptr);
 
-	const Anchor *anchor = anchors.getptr(p_uuid);
+	const Anchor *anchor = anchors.getptr(String(p_uuid).remove_char('-'));
 	if (anchor) {
 		return Object::cast_to<XRAnchor3D>(ObjectDB::get_instance(anchor->node));
 	}
@@ -387,7 +387,7 @@ XRAnchor3D *OpenXRFbSceneManager::get_anchor_node(const StringName &p_uuid) cons
 Ref<OpenXRFbSpatialEntity> OpenXRFbSceneManager::get_spatial_entity(const StringName &p_uuid) const {
 	ERR_FAIL_COND_V(!anchors_created, nullptr);
 
-	const Anchor *anchor = anchors.getptr(p_uuid);
+	const Anchor *anchor = anchors.getptr(String(p_uuid).remove_char('-'));
 	if (anchor) {
 		return anchor->entity;
 	}
