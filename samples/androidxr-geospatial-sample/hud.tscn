@@ -1,0 +1,181 @@
+[gd_scene format=3 uid="uid://baihhee3p1y1h"]
+
+[ext_resource type="Script" uid="uid://b23m7mamfo54g" path="res://hud.gd" id="1_37p78"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_37p78"]
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(0.5, 0.5, 0.5, 0.5019608)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
+
+[node name="Hud" type="CenterContainer" unique_id=374806157]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_37p78")
+
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=1633876084]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_37p78")
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer" unique_id=63758091]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer" unique_id=1824965928]
+custom_minimum_size = Vector2(550, 0)
+layout_mode = 2
+
+[node name="TopGridContainer" type="GridContainer" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=1963035670]
+layout_mode = 2
+columns = 2
+
+[node name="GeospatialSupportedLabel" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/TopGridContainer" unique_id=1161244790]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Geospatial supported:"
+
+[node name="GeospatialSupportedField" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/TopGridContainer" unique_id=2069116975]
+unique_name_in_owner = true
+layout_mode = 2
+text = "unknown"
+horizontal_alignment = 2
+
+[node name="AuthenticatedLabel" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/TopGridContainer" unique_id=2127398968]
+layout_mode = 2
+text = "Authenticated:"
+
+[node name="AuthenticatedField" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/TopGridContainer" unique_id=1043822572]
+unique_name_in_owner = true
+layout_mode = 2
+text = "false"
+horizontal_alignment = 2
+
+[node name="VPSAvailabilityLabel" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/TopGridContainer" unique_id=283021718]
+layout_mode = 2
+text = "VPS available:"
+
+[node name="VPSAvailabilityField" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/TopGridContainer" unique_id=1562472717]
+unique_name_in_owner = true
+layout_mode = 2
+text = "unknown"
+horizontal_alignment = 2
+
+[node name="GeospatialStateLabel" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/TopGridContainer" unique_id=814669752]
+layout_mode = 2
+text = "Geospatial state:"
+
+[node name="GeospatialStateField" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/TopGridContainer" unique_id=132620873]
+unique_name_in_owner = true
+layout_mode = 2
+text = "stopped"
+horizontal_alignment = 2
+
+[node name="HSeparator1" type="HSeparator" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=613058703]
+layout_mode = 2
+
+[node name="PositionGridContainer" type="GridContainer" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=491803785]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+columns = 2
+
+[node name="PositionValidLabel" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/PositionGridContainer" unique_id=416576308]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Position valid:"
+
+[node name="PositionValidField" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/PositionGridContainer" unique_id=1221050829]
+unique_name_in_owner = true
+layout_mode = 2
+text = "false"
+horizontal_alignment = 2
+
+[node name="LatitudeLabel" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/PositionGridContainer" unique_id=1268794724]
+layout_mode = 2
+text = "Latitude:"
+
+[node name="LatitudeField" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/PositionGridContainer" unique_id=1316996903]
+unique_name_in_owner = true
+layout_mode = 2
+text = "unknown"
+horizontal_alignment = 2
+
+[node name="LongitudeLabel" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/PositionGridContainer" unique_id=2092208711]
+layout_mode = 2
+text = "Longitude:"
+
+[node name="LongitudeField" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/PositionGridContainer" unique_id=1827259458]
+unique_name_in_owner = true
+layout_mode = 2
+text = "unknown"
+horizontal_alignment = 2
+
+[node name="HorizontalAccuracyLabel" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/PositionGridContainer" unique_id=146913600]
+layout_mode = 2
+text = "Horizontal accuracy:"
+
+[node name="HorizontalAccuracyField" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/PositionGridContainer" unique_id=1293674201]
+unique_name_in_owner = true
+layout_mode = 2
+text = "unknown"
+horizontal_alignment = 2
+
+[node name="VerticalAccuracyLabel" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/PositionGridContainer" unique_id=2125184272]
+layout_mode = 2
+text = "Vertical accuracy:"
+
+[node name="VerticalAccuracyField" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/PositionGridContainer" unique_id=801883440]
+unique_name_in_owner = true
+layout_mode = 2
+text = "unknown"
+horizontal_alignment = 2
+
+[node name="HSeparator2" type="HSeparator" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=1578223354]
+layout_mode = 2
+
+[node name="OrientationGridContainer" type="GridContainer" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=690948332]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+columns = 2
+
+[node name="OrientationValidLabel" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/OrientationGridContainer" unique_id=286472996]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Orientation valid:"
+
+[node name="OrientationValidField" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/OrientationGridContainer" unique_id=570855260]
+unique_name_in_owner = true
+layout_mode = 2
+text = "false"
+horizontal_alignment = 2
+
+[node name="OrientationLabel" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/OrientationGridContainer" unique_id=1282502436]
+layout_mode = 2
+text = "Orientation:"
+
+[node name="OrientationField" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/OrientationGridContainer" unique_id=2029851777]
+unique_name_in_owner = true
+layout_mode = 2
+text = "unknown"
+horizontal_alignment = 2
+
+[node name="OrientationYawAccuracyLabel" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/OrientationGridContainer" unique_id=1624657246]
+layout_mode = 2
+text = "Orientation yaw accuracy:"
+
+[node name="OrientationYawAccuracyField" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/OrientationGridContainer" unique_id=2115032770]
+unique_name_in_owner = true
+layout_mode = 2
+text = "unknown"
+horizontal_alignment = 2

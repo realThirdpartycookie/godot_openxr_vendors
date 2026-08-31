@@ -51,6 +51,8 @@
         "OpenXRAPIExtension",
         "OpenXRAction",
         "OpenXRExtensionWrapper",
+        "OpenXRFutureExtension",
+        "OpenXRFutureResult",
         "OpenXRInteractionProfileMetadata",
         "OpenXRInterface",
         "OptionButton",

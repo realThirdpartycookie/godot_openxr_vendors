@@ -1,0 +1,63 @@
+[gd_scene format=3 uid="uid://debi32dnmrjov"]
+
+[ext_resource type="Script" uid="uid://biiu53ef0jkj0" path="res://main.gd" id="1_ig7tw"]
+[ext_resource type="Script" uid="uid://bnjcoo6qce8d6" path="res://addons/common/start_xr.gd" id="2_0xm2m"]
+[ext_resource type="PackedScene" uid="uid://dcwibwtseri8h" path="res://addons/common/viewport_2d_in_3d/viewport_2d_in_3d.tscn" id="3_h2yge"]
+[ext_resource type="PackedScene" uid="uid://baihhee3p1y1h" path="res://hud.tscn" id="4_1bvp3"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_0xm2m"]
+sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+ground_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+
+[sub_resource type="Sky" id="Sky_h2yge"]
+sky_material = SubResource("ProceduralSkyMaterial_0xm2m")
+
+[sub_resource type="Environment" id="Environment_1bvp3"]
+background_mode = 2
+sky = SubResource("Sky_h2yge")
+tonemap_mode = 2
+
+[sub_resource type="BoxMesh" id="BoxMesh_0xm2m"]
+size = Vector3(0.1, 0.1, 0.1)
+
+[node name="Main" type="Node3D" unique_id=878451345]
+script = ExtResource("1_ig7tw")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=34692203]
+environment = SubResource("Environment_1bvp3")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1318113084]
+transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545, -0.50000006, 0.75, -0.43301266, 0, 0, 0)
+
+[node name="StartXR" type="Node3D" parent="." unique_id=102407613]
+script = ExtResource("2_0xm2m")
+
+[node name="XROrigin3D" type="XROrigin3D" parent="." unique_id=990045554]
+
+[node name="XRCamera3D" type="XRCamera3D" parent="XROrigin3D" unique_id=2139115797]
+unique_name_in_owner = true
+
+[node name="Viewport2Din3D" parent="XROrigin3D/XRCamera3D" unique_id=167215468 instance=ExtResource("3_h2yge")]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.01173006, -0.5967002)
+scene = ExtResource("4_1bvp3")
+pixel_size = 0.0005
+
+[node name="LeftController" type="XRController3D" parent="XROrigin3D" unique_id=548191848]
+tracker = &"left_hand"
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="XROrigin3D/LeftController" unique_id=254909014]
+visible = false
+mesh = SubResource("BoxMesh_0xm2m")
+
+[node name="RightController" type="XRController3D" parent="XROrigin3D" unique_id=1098605462]
+tracker = &"right_hand"
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="XROrigin3D/RightController" unique_id=1774839197]
+visible = false
+mesh = SubResource("BoxMesh_0xm2m")
+
+[node name="Timer" type="Timer" parent="." unique_id=1513758556]
+unique_name_in_owner = true
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

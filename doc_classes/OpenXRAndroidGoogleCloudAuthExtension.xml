@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="OpenXRAndroidGoogleCloudAuthExtension" inherits="OpenXRExtensionWrapper" api_type="extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
+	<brief_description>
+		Wraps the [code]XR_ANDROID_google_cloud_auth[/code] extension.
+	</brief_description>
+	<description>
+		Wraps the [code]XR_ANDROID_google_cloud_auth[/code] extension, which provides authentication for Google Cloud services used by other Android XR extensions such as [OpenXRAndroidGeospatialExtension].
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="is_authenticated" qualifiers="const">
+			<return type="bool" />
+			<description>
+				Returns [code]true[/code] if any of the authentication methods have been successfully completed.
+				See [method set_google_cloud_auth_api_key], [method set_google_cloud_auth_keyless], and [method set_google_cloud_auth_token].
+			</description>
+		</method>
+		<method name="is_enabled" qualifiers="const">
+			<return type="bool" />
+			<description>
+				Returns [code]true[/code] if the [code]XR_ANDROID_google_cloud_auth[/code] extension is supported by the OpenXR runtime.
+			</description>
+		</method>
+		<method name="set_google_cloud_auth_api_key">
+			<return type="OpenXRFutureResult" />
+			<param index="0" name="api_key" type="String" />
+			<description>
+				Sets Google Cloud authentication using an API key. Returns an [OpenXRFutureResult] that completes when authentication is finished.
+			</description>
+		</method>
+		<method name="set_google_cloud_auth_keyless">
+			<return type="OpenXRFutureResult" />
+			<description>
+				Sets Google Cloud authentication using keyless authentication. Returns an [OpenXRFutureResult] that completes when authentication is finished.
+			</description>
+		</method>
+		<method name="set_google_cloud_auth_token">
+			<return type="OpenXRFutureResult" />
+			<param index="0" name="auth_token" type="String" />
+			<description>
+				Sets Google Cloud authentication using an auth token. Returns an [OpenXRFutureResult] that completes when authentication is finished.
+			</description>
+		</method>
+	</methods>
+</class>

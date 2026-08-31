@@ -54,7 +54,9 @@
 #include "extensions/openxr_android_environment_depth_extension.h"
 #include "extensions/openxr_android_eye_tracking_extension.h"
 #include "extensions/openxr_android_face_tracking_extension.h"
+#include "extensions/openxr_android_geospatial_extension.h"
 #include "extensions/openxr_android_global_passthrough_dimming_extension.h"
+#include "extensions/openxr_android_google_cloud_auth_extension.h"
 #include "extensions/openxr_android_light_estimation_extension.h"
 #include "extensions/openxr_android_mouse_interaction_extension.h"
 #include "extensions/openxr_android_passthrough_camera_state_extension.h"
@@ -106,6 +108,7 @@
 
 #include "classes/openxr_android_anchor_tracker.h"
 #include "classes/openxr_android_environment_depth.h"
+#include "classes/openxr_android_geospatial_pose.h"
 #include "classes/openxr_android_hit_result.h"
 #include "classes/openxr_android_light_estimation.h"
 #include "classes/openxr_android_scene_submesh_data.h"
@@ -244,6 +247,8 @@ void initialize_plugin_module(ModuleInitializationLevel p_level) {
 			GDREGISTER_CLASS(OpenXRFbSpaceWarpExtension);
 			GDREGISTER_CLASS(OpenXRMetaEnvironmentDepthExtension);
 			GDREGISTER_CLASS(OpenXRAndroidEnvironmentDepthExtension);
+			GDREGISTER_CLASS(OpenXRAndroidGeospatialExtension);
+			GDREGISTER_CLASS(OpenXRAndroidGoogleCloudAuthExtension);
 
 #ifdef META_HEADERS_ENABLED
 			// XR_EXT_stationary_reference space is now part of the spec!
@@ -407,6 +412,14 @@ void initialize_plugin_module(ModuleInitializationLevel p_level) {
 				_register_extension_with_openxr(OpenXRAndroidUnboundedReferenceSpaceExtension::get_singleton());
 			}
 
+			if (_get_bool_project_setting("xr/openxr/extensions/androidxr/google_cloud_auth")) {
+				_register_extension_with_openxr(OpenXRAndroidGoogleCloudAuthExtension::get_singleton());
+			}
+
+			if (_get_bool_project_setting("xr/openxr/extensions/androidxr/geospatial")) {
+				_register_extension_with_openxr(OpenXRAndroidGeospatialExtension::get_singleton());
+			}
+
 			// Only works with Godot 4.7 or later.
 			if (godot::gdextension_interface::godot_version.minor >= 7) {
 				GDREGISTER_CLASS(OpenXRAndroidMouseInteractionExtension);
@@ -477,6 +490,8 @@ void initialize_plugin_module(ModuleInitializationLevel p_level) {
 			_register_extension_as_singleton(OpenXRMetaEnvironmentDepthExtension::get_singleton());
 			_register_extension_as_singleton(OpenXRAndroidEnvironmentDepthExtension::get_singleton());
 			_register_extension_as_singleton(OpenXRAndroidUnboundedReferenceSpaceExtension::get_singleton());
+			_register_extension_as_singleton(OpenXRAndroidGeospatialExtension::get_singleton());
+			_register_extension_as_singleton(OpenXRAndroidGoogleCloudAuthExtension::get_singleton());
 			_register_extension_as_singleton(OpenXRAndroidTrackablesExtension::get_singleton());
 			_register_extension_as_singleton(OpenXRAndroidTrackablesObjectExtension::get_singleton());
 			_register_extension_as_singleton(OpenXRAndroidRaycastExtension::get_singleton());
@@ -500,6 +515,7 @@ void initialize_plugin_module(ModuleInitializationLevel p_level) {
 			_register_extension_as_singleton(OpenXRStationaryReferenceSpaceExtension::get_singleton());
 #endif // META_HEADERS_ENABLED
 
+			GDREGISTER_CLASS(OpenXRAndroidGeospatialPose);
 			GDREGISTER_CLASS(OpenXRAndroidLightEstimation);
 
 			GDREGISTER_ABSTRACT_CLASS(OpenXRAndroidTrackableTracker);
@@ -679,6 +695,8 @@ void add_plugin_project_settings() {
 	_add_bool_project_setting(project_settings, "xr/openxr/extensions/androidxr/environment_depth", false);
 	_add_bool_project_setting(project_settings, "xr/openxr/extensions/androidxr/unbounded_reference_space", false);
 	_add_bool_project_setting(project_settings, "xr/openxr/extensions/androidxr/unbounded_reference_space/enable_on_startup", false);
+	_add_bool_project_setting(project_settings, "xr/openxr/extensions/androidxr/google_cloud_auth", false);
+	_add_bool_project_setting(project_settings, "xr/openxr/extensions/androidxr/geospatial", false);
 	_add_bool_project_setting(project_settings, "xr/openxr/extensions/androidxr/trackables", false);
 	_add_bool_project_setting(project_settings, "xr/openxr/extensions/androidxr/trackables_object", false);
 	_add_bool_project_setting(project_settings, "xr/openxr/extensions/androidxr/raycast", false);

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="OpenXRAndroidGeospatialPose" inherits="RefCounted" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
+	<brief_description>
+		Represents a geospatial pose from [code]XR_ANDROID_geospatial[/code].
+	</brief_description>
+	<description>
+		Represents a position and orientation relative to the Earth, using coordinates relative to the WGS84 ellipsoid. When returned by [method OpenXRAndroidGeospatialExtension.transform_to_geospatial_pose], the pose also includes accuracy and validity information.
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="create" qualifiers="static">
+			<return type="OpenXRAndroidGeospatialPose" />
+			<param index="0" name="orientation" type="Quaternion" />
+			<param index="1" name="latitude" type="float" />
+			<param index="2" name="longitude" type="float" />
+			<param index="3" name="altitude" type="float" />
+			<description>
+				Creates a new [OpenXRAndroidGeospatialPose] with the given orientation, latitude, longitude, and altitude.
+			</description>
+		</method>
+		<method name="is_orientation_valid" qualifiers="const">
+			<return type="bool" />
+			<description>
+				Returns [code]true[/code] if the orientation data in this pose is valid. When [code]false[/code], the [member orientation] and [member orientation_yaw_accuracy] fields should not be used.
+			</description>
+		</method>
+		<method name="is_position_valid" qualifiers="const">
+			<return type="bool" />
+			<description>
+				Returns [code]true[/code] if the position data in this pose is valid. When [code]false[/code], the [member latitude], [member longitude], [member altitude], [member horizontal_accuracy], and [member vertical_accuracy] fields should not be used.
+			</description>
+		</method>
+	</methods>
+	<members>
+		<member name="altitude" type="float" setter="set_altitude" getter="get_altitude" default="0.0">
+			The altitude in meters above the WGS84 ellipsoid.
+		</member>
+		<member name="horizontal_accuracy" type="float" setter="" getter="get_horizontal_accuracy" default="0.0">
+			The estimated horizontal accuracy of the position, defined as the radius in meters of the 68% confidence circle around the latitude and longitude. Only set when the pose is returned by [method OpenXRAndroidGeospatialExtension.transform_to_geospatial_pose].
+		</member>
+		<member name="latitude" type="float" setter="set_latitude" getter="get_latitude" default="0.0">
+			The latitude in degrees, between -90 and +90.
+		</member>
+		<member name="longitude" type="float" setter="set_longitude" getter="get_longitude" default="0.0">
+			The longitude in degrees, between -180 and +180.
+		</member>
+		<member name="orientation" type="Quaternion" setter="set_orientation" getter="get_orientation" default="Quaternion(0, 0, 0, 1)">
+			The orientation relative to an east-up-south (EUS) coordinate system, where +X is East, +Y is Up, and +Z is South. This coordinate system depends on the precise position.
+		</member>
+		<member name="orientation_yaw_accuracy" type="float" setter="" getter="get_orientation_yaw_accuracy" default="0.0">
+			The estimated yaw accuracy of the orientation, defined as the radius in degrees of the 68% confidence level around the orientation yaw angle. Only set when the pose is returned by [method OpenXRAndroidGeospatialExtension.transform_to_geospatial_pose].
+		</member>
+		<member name="vertical_accuracy" type="float" setter="" getter="get_vertical_accuracy" default="0.0">
+			The estimated vertical accuracy of the position in meters, defined as the 68% confidence distance around the altitude. Only set when the pose is returned by [method OpenXRAndroidGeospatialExtension.transform_to_geospatial_pose].
+		</member>
+	</members>
+</class>

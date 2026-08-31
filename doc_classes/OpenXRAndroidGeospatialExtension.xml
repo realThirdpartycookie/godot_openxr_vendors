@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="OpenXRAndroidGeospatialExtension" inherits="OpenXRExtensionWrapper" api_type="extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
+	<brief_description>
+		Wraps the [code]XR_ANDROID_geospatial[/code] extension.
+	</brief_description>
+	<description>
+		Wraps the [code]XR_ANDROID_geospatial[/code] extension, which provides precise geo-location and orientation using a combination of motion tracking, GPS and other sensors, and Google's Visual Positioning System (VPS). This can provide sub-meter positional accuracy and sub-degree orientation accuracy.
+		Authentication must be configured via [OpenXRAndroidGoogleCloudAuthExtension] before using this extension.
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="check_vps_availability">
+			<return type="OpenXRFutureResult" />
+			<param index="0" name="latitude" type="float" />
+			<param index="1" name="longitude" type="float" />
+			<description>
+				Checks whether VPS (Visual Positioning System) data is available at the given latitude and longitude. Returns an [OpenXRFutureResult] whose result value is [enum VpsAvailability].
+				When VPS is unavailable, geospatial tracking accuracy may be lower at that location.
+				You can call [method get_geographic_location] to get the latitude and longitude to use here.
+			</description>
+		</method>
+		<method name="geospatial_pose_to_transform">
+			<return type="Transform3D" />
+			<param index="0" name="pose" type="OpenXRAndroidGeospatialPose" />
+			<description>
+				Converts an [OpenXRAndroidGeospatialPose] to a [Transform3D] in the current play space. The geospatial tracker must be in the [constant GEOSPATIAL_STATE_RUNNING] state.
+			</description>
+		</method>
+		<method name="get_geographic_location">
+			<return type="void" />
+			<param index="0" name="callback" type="Callable" />
+			<description>
+				Gets the devices's geographic location using normal Android APIs, not VPS.
+				The given callback will be called with three arguments: [code](success: bool, latitude: float, longitude: float)[/code]
+				This method is helpful for getting a latitude and longitude to call [method check_vps_availability]
+			</description>
+		</method>
+		<method name="get_geospatial_state" qualifiers="const">
+			<return type="int" enum="OpenXRAndroidGeospatialExtension.GeospatialState" />
+			<description>
+				Returns the current state of the geospatial tracker.
+			</description>
+		</method>
+		<method name="is_geospatial_supported" qualifiers="const">
+			<return type="bool" />
+			<description>
+				Returns [code]true[/code] if the [code]XR_ANDROID_geospatial[/code] extension is supported by the OpenXR runtime.
+			</description>
+		</method>
+		<method name="start_geospatial">
+			<return type="void" />
+			<description>
+				Creates the geospatial tracker, which tracks the device's position and orientation relative to the Earth.
+				You must call [method is_geospatial_supported] first to verify that the extension is supported. The tracker initially enters the [constant GEOSPATIAL_STATE_STOPPED] state, and the application must wait for the [signal openxr_android_geospatial_state_changed] signal to indicate [constant GEOSPATIAL_STATE_RUNNING] before using pose conversion methods.
+			</description>
+		</method>
+		<method name="stop_geospatial">
+			<return type="void" />
+			<description>
+				Destroys the geospatial tracker and stops geospatial tracking.
+			</description>
+		</method>
+		<method name="transform_to_geospatial_pose">
+			<return type="OpenXRAndroidGeospatialPose" />
+			<param index="0" name="transform" type="Transform3D" />
+			<description>
+				Converts a [Transform3D] in the current play space to an [OpenXRAndroidGeospatialPose] containing latitude, longitude, altitude, and east-up-south orientation.
+				The returned pose includes accuracy information: check [method OpenXRAndroidGeospatialPose.is_position_valid] and [method OpenXRAndroidGeospatialPose.is_orientation_valid] before reading the corresponding fields. The geospatial tracker must be in the [constant GEOSPATIAL_STATE_RUNNING] state.
+			</description>
+		</method>
+	</methods>
+	<signals>
+		<signal name="openxr_android_geospatial_state_changed">
+			<param index="0" name="state" type="int" />
+			<description>
+				Emitted when the geospatial tracker state changes. See [enum GeospatialState] for possible values.
+			</description>
+		</signal>
+	</signals>
+	<constants>
+		<constant name="GEOSPATIAL_STATE_STOPPED" value="0" enum="GeospatialState">
+			The geospatial tracker is not running.
+		</constant>
+		<constant name="GEOSPATIAL_STATE_RUNNING" value="1" enum="GeospatialState">
+			The geospatial tracker is running and ready to use.
+		</constant>
+		<constant name="GEOSPATIAL_STATE_INITIALIZATION_FAILED" value="2" enum="GeospatialState">
+			The geospatial tracker failed to initialize.
+		</constant>
+		<constant name="VPS_AVAILABILITY_UNAVAILABLE" value="0" enum="VpsAvailability">
+			The VPS is unavailable.
+		</constant>
+		<constant name="VPS_AVAILABILITY_AVAILABLE" value="1" enum="VpsAvailability">
+			The VPS is available.
+		</constant>
+	</constants>
+</class>
